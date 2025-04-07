@@ -21,15 +21,15 @@ public class UserUsage {
                     .forEach(System.out::println);
             userRepository.findByLikeLogin("e")
                     .forEach(System.out::println);
-            userRepository.findById(user.getUserId())
+            userRepository.findById(user.getId())
                     .ifPresent(System.out::println);
             userRepository.findByLogin("admin")
                     .ifPresent(System.out::println);
             user.setPassword("password");
             userRepository.update(user);
-            userRepository.findById(user.getUserId())
+            userRepository.findById(user.getId())
                     .ifPresent(System.out::println);
-            userRepository.delete(user.getUserId());
+            userRepository.delete(user.getId());
             userRepository.findAllOrderById()
                     .forEach(System.out::println);
         } finally {

@@ -43,9 +43,9 @@ public class UserRepository {
         try {
             session.beginTransaction();
             session.createQuery(
-                            "UPDATE User SET name = :fName WHERE userId = :fId")
-                    .setParameter("fName", "new name")
-                    .setParameter("fId", user.getUserId())
+                            "UPDATE User SET login = :fLogin WHERE id = :fId")
+                    .setParameter("fLogin", "new login")
+                    .setParameter("fId", user.getId())
                     .executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -60,13 +60,13 @@ public class UserRepository {
      *
      * @param userId ID
      */
-    public void delete(int userId) {
+    public void delete(int id) {
         Session session = sf.openSession();
         try {
             session.beginTransaction();
             session.createQuery(
-                            "DELETE User WHERE userId = :fId")
-                    .setParameter("fId", userId)
+                            "DELETE User WHERE id = :fId")
+                    .setParameter("fId", id)
                     .executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -85,7 +85,7 @@ public class UserRepository {
         Session session = sf.openSession();
         List<User> users = List.of();
         try {
-            Query query = session.createQuery("from User ORDER by userId");
+            Query query = session.createQuery("from User ORDER by id");
             for (Object st : query.list()) {
                 users = query.list();
             }
@@ -102,12 +102,12 @@ public class UserRepository {
      *
      * @return пользователь.
      */
-    public Optional<User> findById(int userId) {
+    public Optional<User> findById(int id) {
         Session session = sf.openSession();
         User user = null;
         try {
-            Query<User> query = session.createQuery("from User as u WHERE u.userId = :fId", User.class)
-                    .setParameter("fId", userId);
+            Query<User> query = session.createQuery("from User as u WHERE u.id = :fId", User.class)
+                    .setParameter("fId", id);
             user = query.uniqueResult();
             session.getTransaction().commit();
         } catch (Exception e) {
