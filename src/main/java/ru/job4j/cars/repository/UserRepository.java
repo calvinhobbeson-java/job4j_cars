@@ -58,7 +58,7 @@ public class UserRepository {
     /**
      * Удалить пользователя по id.
      *
-     * @param userId ID
+     * @param id ID
      */
     public void delete(int id) {
         Session session = sf.openSession();
@@ -83,18 +83,16 @@ public class UserRepository {
      */
     public List<User> findAllOrderById() {
         Session session = sf.openSession();
-        List<User> users = List.of();
+        List<User> result = List.of();
         try {
-            Query query = session.createQuery("from User ORDER by id");
-            for (Object st : query.list()) {
-                users = query.list();
-            }
+            result = session.createQuery("from User ORDER by id").list();
+            session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
             session.close();
         }
-        return users;
+        return result;
     }
 
     /**
@@ -115,7 +113,7 @@ public class UserRepository {
         } finally {
             session.close();
         }
-        return Optional.of(user);
+        return Optional.ofNullable(user);
     }
 
     /**
@@ -126,20 +124,17 @@ public class UserRepository {
      */
     public List<User> findByLikeLogin(String key) {
         Session session = sf.openSession();
-        List<User> users = List.of();
+        List<User> result = List.of();
         try {
-            Query query = session.createQuery("from User as u WHERE u.login LIKE :key")
-                    .setParameter("key", key);
+            result = session.createQuery("from User as u WHERE u.login LIKE :key")
+                    .setParameter("key", key).list();
             session.getTransaction().commit();
-            for (Object st : query.list()) {
-                users = query.list();
-            }
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
             session.close();
         }
-        return users;
+        return result;
     }
 
     /**
@@ -161,6 +156,6 @@ public class UserRepository {
         } finally {
             session.close();
         }
-        return Optional.of(user);
+        return Optional.ofNullable(user);
     }
 }
